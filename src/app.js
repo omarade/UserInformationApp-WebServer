@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 
 app.set('views', './src/views');
 app.set('view engine', 'pug');
-app.use(express.static('.src/public'))
 
 app.use('/', bodyParser()) //creates key-value pairs request.body in app.post, e.g. request.body.username
 
