@@ -1,0 +1,24 @@
+doctype html
+html
+	head
+		style
+			include css/bootstrap.min.css
+			include css/bootstrap-theme.min.css
+	body
+		.container
+			.row
+				.col-xs-12
+					.jumbotron
+						h2.text-center Search Form
+						form(action="/search", method="post")
+							//- name='username' -- request.body.username
+							.form-group
+								label(for='text') <mark>Enter The Name Of The User You Are Looking For</mark>
+								input#text.form-control(type='text', name='username' placeholder='Who are you looking for?')
+							.form-group
+								input.btn.btn-primary(type='submit', value='Search!')
+							
+		
+		script 
+			include js/jquery.min.js
+			include js/bootstrap.min.js

@@ -1,0 +1,30 @@
+doctype html
+html
+	head
+		style
+			include css/bootstrap.min.css
+			include css/bootstrap-theme.min.css
+	body
+		.container
+			.row
+				.col-xs-12
+					.well
+						h2.text-center ADD A USER
+						form(action="/adduser", method="post")
+
+							//- name='username' -- request.body.username
+							.form-group
+								label(for='text') FIRST NAME
+								input.form-control(type='text', name='firstname' placeholder='. . .')
+							.form-group
+								label(for='text') LAST NAME
+								input.form-control(type='text', name='lastname', placeholder='. . .')
+								//- name='email' -- request.body.email
+							.form-group
+								label(for='email') E-MAIL
+								input.form-control(type='text', name='email' placeholder='. . .')
+							.form-group.text-center
+								input.btn.btn-info(type='submit', value='SEND YOUR DATA')
+		script 
+			include js/jquery.min.js
+			include js/bootstrap.min.js

@@ -1,0 +1,17 @@
+doctype html
+html
+	head
+		style
+			include css/bootstrap.min.css
+			include css/bootstrap-theme.min.css
+	body
+		.container
+			.row
+				.col-xs-12
+					.jumbotron
+						each user in users
+							h2.text-center #{user.firstname}  #{user.lastname}
+
+		script 
+			include js/jquery.min.js
+			include js/bootstrap.min.js
