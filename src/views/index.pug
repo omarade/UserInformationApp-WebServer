@@ -1,9 +1,8 @@
 doctype html
 html
 	head
-		style
-			include css/bootstrap.min.css
-			include css/bootstrap-theme.min.css
+		link(href='css/bootstrap.min.css' type='text/css' rel='stylesheet')
+		link(href='css/bootstrap-theme.min.css' type='text/css' rel='stylesheet')
 	body
 		.container
 			.row
@@ -12,6 +11,5 @@ html
 						each user in users
 							h2.text-center #{user.firstname}  #{user.lastname}
 
-		script 
-			include js/jquery.min.js
-			include js/bootstrap.min.js
+		script(src='/js/jquery.min.js')
+		script(src='/js/bootstrap.min.js')

@@ -1,24 +1,40 @@
 doctype html
 html
 	head
-		style
-			include css/bootstrap.min.css
-			include css/bootstrap-theme.min.css
+		link(href='css/bootstrap.min.css' type='text/css' rel='stylesheet')
+		link(href='css/bootstrap-theme.min.css' type='text/css' rel='stylesheet')
+
 	body
 		.container
 			.row
 				.col-xs-12
 					.jumbotron
 						h2.text-center Search Form
-						form(action="/search", method="post")
+						form(action="/search" method="post" autocomplete='off' )
 							//- name='username' -- request.body.username
 							.form-group
 								label(for='text') <mark>Enter The Name Of The User You Are Looking For</mark>
-								input#text.form-control(type='text', name='username' placeholder='Who are you looking for?')
+								input#text.form-control(list='suggestion' type='text' name='username' placeholder='Who are you looking for?' onkeyup='suggFinder(this.value)' value='')
 							.form-group.text-center
-								input.btn.btn-primary(type='submit', value='Search!')
-							
-		
-		script 
-			include js/jquery.min.js
-			include js/bootstrap.min.js
+								datalist#suggestion.inputfield
+									option#suggName(text='')
+								input.btn.btn-primary(type='submit' value='Search!')
+						script.
+							var time1 = Date.now()
+							function suggFinder(typedIn){
+								var time2 = Date.now()
+								var timePased = time2 - time1
+								if(timePased < 300){
+									// Do nothing
+								}
+								else{
+									$.post('/suggestionfinder', {typedIn: typedIn}, function(data, status){
+										console.log(data)
+										$('#suggName').text(data)										
+									})
+								}	
+								time1 = time2
+							}
+									
+		script(src='/js/jquery.min.js')
+		script(src='/js/bootstrap.min.js')

@@ -1,12 +1,11 @@
 doctype html
 html
 	head
-		style
-			include css/bootstrap.min.css
-			include css/bootstrap-theme.min.css
+		link(href='css/bootstrap.min.css' type='text/css' rel='stylesheet')
+		link(href='css/bootstrap-theme.min.css' type='text/css' rel='stylesheet')
 	body
 		.container
-			.row
+			.row.centered-form
 				.col-xs-12
 					.well
 						h2.text-center ADD A USER
@@ -25,6 +24,6 @@ html
 								input.form-control(type='text', name='email' placeholder='. . .')
 							.form-group.text-center
 								input.btn.btn-info(type='submit', value='SEND YOUR DATA')
-		script 
-			include js/jquery.min.js
-			include js/bootstrap.min.js
+		
+		script(src='/js/jquery.min.js')
+		script(src='/js/bootstrap.min.js')
