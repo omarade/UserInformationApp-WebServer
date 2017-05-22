@@ -3,17 +3,17 @@ const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
 
-app.set('views', './src/views');
+app.set('views', __dirname + '/src/views');
 app.set('view engine', 'pug');
 
 app.use('/', bodyParser()) //creates key-value pairs request.body in app.post, e.g. request.body.username
+app.use(express.static('src/public'))
 
 app.get('/', function (req, res) {
 	fs.readFile('./users.json', function (err, data) {
 		if (err) {
 			console.log('error');
 		}
-
 		var parsedData = JSON.parse(data);
 		console.log('users read: ' + parsedData.length + " users loaded.");
 
@@ -21,45 +21,42 @@ app.get('/', function (req, res) {
 	});
 });
 
-// - route 2: renders a page that displays a form which is your search bar.
 app.get('/search', function (req, res){
 	res.render('search')
 })
 
-/*- route 3: takes in the post request from your form,
-then displays matching users on a new page.
-Users should be matched based on whether either 
-their first or last name contains the input string.*/
-var fullName
-var name
 app.post('/search', (req, res) => {
-	console.log('req.body.username in app.post("/search")')
-    console.log(req.body.username)
-    
+	console.log('req.body.username in app.post("/search")')  
     //process the data..
     fs.readFile('./users.json', function(err,data){
     	if (err){
     		console.log('error')
     	}
-    	var parsedData = JSON.parse(data);
-    	fullName = ""
-    	name = req.body.username
+    	let parsedData = JSON.parse(data);
+    	let fullName = ""
+    	let name = req.body.username
     	for(var i = 0 ; i < parsedData.length ; i++){
-    		if (req.body.username === (parsedData[i].firstname || parsedData[i].lastname)){
-    			fullName += parsedData[i].firstname.concat(" ", parsedData[i].lastname, " ");
+    		console.log('req.body.username, parsedData[i].firstname + " " + parsedData[i].lastname')
+    		console.log(req.body.username, parsedData[i].firstname + " " + parsedData[i].lastname, (parsedData[i].firstname + " " + parsedData[i].lastname).length)
+    		if (req.body.username === parsedData[i].firstname + " " + parsedData[i].lastname || req.body.username === parsedData[i].firstname || req.body.username === parsedData[i].lastname){		
+    			console.log('req.body.username, parsedData[i].firstname + " " + parsedData[i].lastname')
+    			console.log(req.body.username, parsedData[i].firstname + " " + parsedData[i].lastname)
+    			fullName += parsedData[i].firstname + " " + parsedData[i].lastname
     		}
     	}
     	if(fullName === ""){
     		fullName = "Not found"
     	}    	
-	    console.log(fullName); 
-	    res.redirect('/searchresult')		    		
+	    res.render('searchresult',{
+	    	foundUser: fullName, 
+	    	searchedUser: name
+	    })		    		
     })
 })
 
-app.get('/searchresult',function (req, res){
-	res.render('searchresult',{foundUser: fullName, searchedUser: name})
-})	
+// app.get('/searchresult',function (req, res){
+// 	res.render('searchresult',{foundUser: fullName, searchedUser: name})
+// })	
 
 /*- route 4: renders a page with three forms on it (first name, last name, and email) 
 that allows you to add new users to the users.json file.*/
@@ -92,6 +89,30 @@ app.post('/adduser', function(req, res){
 		});
     })	
 	res.redirect('/')
+})
+
+app.post('/suggestionfinder', (req, res) => {	
+	var typedIn = req.body.typedIn
+	
+	fs.readFile('./users.json', function(err,data){
+    	if (err){
+    		console.log('error')
+    	}
+    	var parsedData = JSON.parse(data)
+    	var sugg = ""
+    	for (var i = 0 ; i < parsedData.length; i++){
+    		var slicedFirstName = parsedData[i].firstname.slice(0, typedIn.length)
+    		var slicedLastName = parsedData[i].lastname.slice(0, typedIn.length)
+    		
+    		if(slicedFirstName === typedIn || slicedLastName === typedIn){
+    			sugg = parsedData[i].firstname + " " + parsedData[i].lastname   			
+    		}    		
+    	}
+    	if(typedIn === ""){
+    		sugg = ""
+    	}
+    	res.send(sugg)
+	})	
 })
 
 //server listens to clients (people with their browsers) who want to connect
